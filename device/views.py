@@ -363,7 +363,7 @@ def deviceCopyRunningToStartup(request, connection_id, project_id, device_id):
     device = Node(project_id=project_id, node_id=device_id, connector=server)
     device.get()
     all_result = []
-    if (device.status != "started"):
+    if device.status != "started":
         return HttpResponse(str("Device is not running!"), content_type="application/json")
     tn = Telnet(str(device.console_host), device.console)
     prepareTelnet(tn, "connect")
@@ -372,13 +372,13 @@ def deviceCopyRunningToStartup(request, connection_id, project_id, device_id):
     for i in range(10):
         x = tn.read_until(b"#").decode("utf-8")
         # print(x.split("\n")[-2])
-        if ("[OK]" in x.split("\n")[-2]):
+        if "[OK]" in x.split("\n")[-2]:
             c = True
             break
         else:
             time.sleep(1)
     tn.close()
-    if (c):
+    if c:
         return HttpResponse(str("Config copied successfully!"), content_type="application/json")
     else:
         return HttpResponse(str("Config copied successfully!"), content_type="application/json")
@@ -398,7 +398,7 @@ def deviceCreateVlan(request, connection_id, project_id, device_id):
     server = Gns3Connector(url)
     device = Node(project_id=project_id, node_id=device_id, connector=server)
     device.get()
-    if (device.status != "started"):
+    if device.status != "started":
         return HttpResponse(str("Device is not running!"), content_type="application/json")
     else:
         if request.method == "POST":
@@ -460,7 +460,7 @@ def deviceVlanAccessMode(request, connection_id, project_id, device_id):
         "port": str(device.console),
         # "fast_cli": False,  # Notice the item here
     }
-    if (device.status != "started"):
+    if device.status != "started":
         return HttpResponse(str("Device is not running!"), content_type="application/json")
     else:
         if request.method == "POST":
@@ -538,7 +538,7 @@ def deviceAddStaticRoute(request, connection_id, project_id, device_id):
         "port": str(device.console),
         # "fast_cli": False,  # Notice the item here
     }
-    if (device.status != "started"):
+    if device.status != "started":
         return HttpResponse(str("Device is not running!"), content_type="application/json")
     else:
         if request.method == "POST":
@@ -600,7 +600,7 @@ def deviceInterfacesIpAddress(request, connection_id, project_id, device_id):
         "host": str(device.console_host),
         "port": str(device.console),
     }
-    if (device.status != "started"):
+    if device.status != "started":
         return HttpResponse(str("Device is not running!"), content_type="application/json")
     else:
         if request.method == "POST":
@@ -654,7 +654,7 @@ def deviceGuestIpAddress(request, connection_id, project_id, device_id):
     server = Gns3Connector(url)
     device = Node(project_id=project_id, node_id=device_id, connector=server)
     device.get()
-    if (device.status != "started"):
+    if device.status != "started":
         return HttpResponse(str("Device is not running!"), content_type="application/json")
     else:
         if request.method == "POST":

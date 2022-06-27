@@ -1,0 +1,104 @@
+{% load static %}
+{% load template_filters %}
+
+{% include 'includes/top_main_tags.html' with title="Device Linking" %}
+
+  <body id="page-top">
+    <div id="wrapper">
+      {% include 'includes/sidebar.html' with connection_id=connection_id project_id=project_id%}
+      <div class="d-flex flex-column" id="content-wrapper">
+        <div id="content">
+          {% include 'includes/topbar.html' %}
+          <div class="container-fluid">
+            {% include 'includes/messages.html' %}
+            <div
+              class="d-sm-flex justify-content-between align-items-center mb-4"
+            >
+              <h3 class="text-dark mb-0">Device Linking</h3>
+              <div>
+              <a
+                class="btn btn-success btn-sm d-none d-sm-inline-block text-white"
+                role="button"
+                href="/connections/{{ connection_id }}/projects/{{ project_id }}/links/create"
+                ><i class="fa-solid fa-plus fa-sm text-white"></i
+                >&nbsp;New Link</a
+              >
+              <a
+                class="btn btn-primary btn-sm d-none d-sm-inline-block"
+                role="button"
+                href=""
+                ><i class="fa-solid fa-rotate fa-sm text-white-50"></i
+                >&nbsp;Refresh</a
+              >
+            </div>
+          </div>
+          <div class="row">
+              <div class="col-lg-12 col-xl-12">
+                <div class="card shadow mb-4">
+                  <div class="card-header py-3">
+                    <h6 class="text-primary fw-bold m-0">Current Topology</h6>
+                  </div>
+                  <div class="card-body text-center">
+                    <div id="network_drawing"></div>
+                    <!-- <img src="/connections/{{ connection_id }}/projects/{{ project_id }}/dashboard/network" alt="" srcset=""> -->
+                  </div>
+                </div>
+              </div>
+            <div class="row">
+              <div class="col-lg-12 col-xl-12">
+                <div class="card shadow mb-4">
+                  <div class="card-header py-3">
+                    <h6 class="text-primary fw-bold m-0">Links</h6>
+                  </div>
+                    <div class="card-body">
+                        <div class="table-responsive text-left">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Device A</th>
+                                        <th>Device A Port</th>
+                                        <th>Device B</th>
+                                        <th>Device B Port</th>
+                                        <th>Link Type</th>
+                                        <th style="padding-right: 0;padding-left: 0;"><strong>Options</strong></th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                  {% for link in links_list %}
+                                    <tr>
+                                      {% for link_node in link.nodes %}
+                                      <td>{{ nodes_names|get_item:link_node.node_id }}</td>
+                                      <td>{{ link_node.label.text }}</td>
+                                      {% endfor %}
+                                        <th>{{ link.link_type }}</th>
+                                        <td style="padding-right: 0;padding-left: 0;">
+                                            <div>
+                                              <a class="btn btn-danger" role="button"
+                                              href="/connections/{{ connection_id }}/projects/{{ project_id }}/links/{{ link.link_id }}/delete">
+                                                <i class="material-icons">delete_forever</i>
+                                              </a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                  {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <script src="{% static 'assets/js/d3.min.js' %}"></script>
+        <script src="{% static 'assets/js/axios.min.js' %}"></script>
+        <script src="{% static 'assets/js/dashboard.js' %}"></script>
+    <script>
+      window.onload = function () {
+        draw_network(
+          "/connections/{{ connection_id }}/projects/{{ project_id }}/dashboard/network"
+        );
+      };
+    </script>
+        {% include 'includes/footer.html' %}

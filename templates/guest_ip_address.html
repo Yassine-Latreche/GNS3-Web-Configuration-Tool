@@ -1,0 +1,107 @@
+{% load static %}
+{% load template_filters %}
+
+{% include 'includes/top_main_tags.html' with title="New Link" %}
+
+  <body id="page-top">
+    <div id="wrapper">
+      {% include 'includes/sidebar.html' with connection_id=connection_id project_id=project_id %}
+      <div class="d-flex flex-column" id="content-wrapper">
+        <div id="content">
+          {% include 'includes/topbar.html' %}
+          <div class="container-fluid">
+            {% include 'includes/messages.html' %}
+            <div
+              class="d-sm-flex justify-content-between align-items-center mb-4"
+            >
+              <h3 class="text-dark mb-0">Configure IP Address</h3>
+            </div>  
+            <div class="row">
+              <div class="col-lg-12 col-xl-12">
+                <div class="card shadow mb-4">
+                  <div class="card-header py-3">
+                    <h6 class="text-primary fw-bold m-0">Device IP Address</h6>
+                  </div>
+                  <div class="card-body text-left">
+                    <form id="createForm">
+                      <div class="row">
+                        <div class="col-lg-3">
+                          {% csrf_token %}
+                          <div class="mb-3">
+                            <label class="form-label" for="guestIpAddress"
+                              ><strong>IP Address</strong><br /></label
+                            ><input
+                              class="form-control"
+                              type="text"
+                              id="guestIpAddress"
+                              placeholder="IP Address"
+                              name="guestIpAddress"
+                            />                        
+                          </div>
+                          <div class="mb-3">
+                            <label class="form-label" for="guestMask"
+                              ><strong>Mask</strong><br /></label
+                            ><input
+                              class="form-control"
+                              type="text"
+                              id="guestMask"
+                              placeholder="Mask"
+                              name="guestMask"
+                            />                        
+                          </div>
+                          <div class="mb-3">
+                            <label class="form-label" for="guestDefaultGateway"
+                              ><strong>Default Gateway</strong><br /></label
+                            ><input
+                              class="form-control"
+                              type="text"
+                              id="guestDefaultGateway"
+                              placeholder="Default Gateway"
+                              name="guestDefaultGateway"
+                            />                        
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row" style="margin-top: 1rem">
+                        <div class="col">
+                          <div class="mb-3">
+                            <button id="submit-btn" class="btn btn-primary btn-sm" type="submit">
+                              Configure
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <script>
+          window.onload = function() {
+            $('#createForm').submit(function(e) {
+                var $inputs = $('#createForm :input');
+                console.log($inputs);
+                let data = {
+                  csrfmiddlewaretoken : $('input[name="csrfmiddlewaretoken"]').val(),
+                  guestIpAddress : $('input[name="guestIpAddress"]').val(),
+                  guestMask : $('input[name="guestMask"]').val(),
+                  guestDefaultGateway : $('input[name="guestDefaultGateway"]').val(),
+                }
+                let currentLink = window.location.href
+                $.post( currentLink, data)
+                .done(function( rep ) {
+                  console.log(rep.responseText)
+                  alert( `${rep.responseText} !` );
+                  window.location.href = currentLink.replace("guest_ip_address", "view");
+                }).fail(function(rep) {
+                  console.log(rep.responseText)
+                  alert( `${rep.responseText} !` );
+                  window.location.href = currentLink.replace("guest_ip_address", "view");
+                });
+                return false;
+            });
+          }
+        </script>
+        {% include 'includes/footer.html' %}

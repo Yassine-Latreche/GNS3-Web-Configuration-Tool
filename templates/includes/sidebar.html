@@ -1,0 +1,46 @@
+{% if project_id %}
+<nav
+class="navbar navbar-dark align-items-start sidebar sidebar-dark accordion bg-gradient-primary p-0"
+>
+<div class="container-fluid d-flex flex-column p-0">
+  <a
+    class="navbar-brand d-flex justify-content-center align-items-center sidebar-brand m-0"
+    href="#"
+  >
+    <div class="sidebar-brand-text mx-3">
+      <span>GNS3 Web Admin</span>
+    </div>
+  </a>
+  <hr class="sidebar-divider my-0" />
+  {% with request.resolver_match.url_name as url_name %}
+  <ul class="navbar-nav text-light" id="accordionSidebar">
+    <li class="nav-item">
+      <a class="nav-link {% if url_name == 'project-main-dashboard' %}active{% endif %}" href="/connections/{{ connection_id }}/projects/{{ project_id }}/dashboard"
+        ><i class="fas fa-tachometer-alt"></i><span> Dashboard</span></a
+      >
+    </li>
+    <li class="nav-item">
+      <a class="nav-link {% if 'device-link' in url_name %}active{% endif %}" href="/connections/{{ connection_id }}/projects/{{ project_id }}/links"
+        ><i class="fa-solid fa-link"></i><span> Device Linking</span></a>
+    </li>
+    <!-- <li class="nav-item {% if url_name == 'home' %}active{% endif %}">
+      <a class="nav-link" href="table.html"><span> Switches</span></a>
+    </li>
+    <li class="nav-item {% if url_name == 'home' %}active{% endif %}">
+      <a class="nav-link" href="table.html"
+        ><i class="fas fa-file-import"></i
+        ><span> Import / Export</span></a
+      >
+    </li> -->
+    {% endwith %}
+  </ul>
+  <div class="text-center d-none d-md-inline">
+    <button
+    class="btn rounded-circle border-0"
+    id="sidebarToggle"
+    type="button"
+    ></button>
+  </div>
+</div>
+</nav>
+{% endif %}

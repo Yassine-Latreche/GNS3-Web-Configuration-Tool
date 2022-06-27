@@ -1,0 +1,205 @@
+{% load static %}
+{% load template_filters %}
+
+{% include 'includes/top_main_tags.html' with title="Projects" %}
+
+  <body style="background-color: #f8f9fc;">
+    <div id="wrapper">
+      {% include 'includes/sidebar.html' with connection_id=connection_id project_id=project_id %}
+    <div class="modal fade" role="dialog" tabindex="-1" id="modal-1">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title" id="modal-title">Create a project</h4>
+            <button
+              onclick="$('#modal-1').modal('hide');"
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <form id="modal-form">
+              <div class="row">
+                <div class="col">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                    <label class="form-label" for="name"
+                      ><strong>Name</strong><br /></label
+                    ><input
+                      class="form-control"
+                      type="text"
+                      id="name"
+                      placeholder="name"
+                      name="name"
+                    />
+                  </div>
+                </div>
+              </div>
+              <div class="row" style="margin-top: 1rem">
+                <div class="col">
+                  <div class="mb-3">
+                    <button id="submit-btn" class="btn btn-primary btn-sm" type="submit">
+                      Create
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="d-flex flex-column " id="content-wrapper">
+      <div id="">
+        {% include 'includes/topbar.html' %}
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-md-9 col-lg-12 col-xl-10">
+          <div
+            class="card shadow mb-3"
+            style="margin-top: 3rem; margin-bottom: 3rem"
+          >
+            <div class="card-header py-3">
+              <p class="text-primary m-0 fw-bold">GNS3 Projects</p>
+            </div>
+            <div class="card-body">
+              {% include 'includes/messages.html' %}
+              {% if projects_list %}
+              <div class="table-responsive text-center">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th><strong>Options</strong></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for project in projects_list %}
+                    <tr>
+                      <td>{{ project.name }}</td>
+                      <td>
+                        <div>
+                          <a
+                          data-id="{{ project.project_id }}"
+                          data-name="{{ project.name }}"
+                          data-connection_id="{{ connection_id }}"
+                          href="/connections/{{ connection_id }}/projects/{{ project.project_id }}/dashboard"
+                          class="btn btn-success"
+                            role="button"
+                            style="
+                              margin-right: 5px;
+                              background: rgb(0, 126, 28);
+                              color: rgb(255, 255, 255);
+                              --bs-success: #007e1c;
+                              --bs-success-rgb: 0, 126, 28;
+                            "
+                            ><i
+                              data-id="{{ project.project_id }}"
+                              data-name="{{ project.name }}"
+                              data-connection_id="{{ connection_id }}"
+                              class="material-icons"
+                              >open_in_browser</i
+                            ></a
+                          ><button
+                            data-id="{{ project.project_id }}"
+                            data-name="{{ project.name }}"
+                            data-connection_id="{{ connection_id }}"
+                            class="btn btn-primary editProject"
+                            type="button"
+                            style="margin-right: 5px"
+                          >
+                            <i
+                              data-id="{{ project.project_id }}"
+                              data-name="{{ project.name }}"
+                              data-connection_id="{{ connection_id }}"
+                              class="material-icons"
+                              >edit</i
+                            ></button
+                          ><a
+                            class="btn btn-danger"
+                            role="button"
+                            data-id="{{ project.project_id }}"
+                            data-name="{{ project.name }}"
+                            data-connection_id="{{ connection_id }}"
+                            href="/connections/{{ connection_id }}/projects/{{ project.project_id }}/delete"
+                            ><i
+                              data-id="{{ project.project_id }}"
+                              data-name="{{ project.name }}"
+                              data-connection_id="{{ connection_id }}"
+                              class="material-icons"
+                              >delete_forever</i
+                            ></a
+                          >
+                        </div>
+                      </td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+              {% else %}
+              <p>No projects are available.</p>
+              {% endif %}
+            </div>
+            <div class="card-footer">
+              <div class="row"><!-- 
+                <div class="col align-self-center">
+                  <nav>
+                    <ul class="pagination">
+                      <li class="page-item">
+                        <a class="page-link" aria-label="Previous" href="#"
+                          ><span aria-hidden="true">«</span></a
+                        >
+                      </li>
+                      <li class="page-item">
+                        <a class="page-link" href="#">1</a>
+                      </li>
+                      <li class="page-item">
+                        <a class="page-link" href="#">2</a>
+                      </li>
+                      <li class="page-item">
+                        <a class="page-link" href="#">3</a>
+                      </li>
+                      <li class="page-item">
+                        <a class="page-link" href="#">4</a>
+                      </li>
+                      <li class="page-item">
+                        <a class="page-link" href="#">5</a>
+                      </li>
+                      <li class="page-item">
+                        <a class="page-link" aria-label="Next" href="#"
+                          ><span aria-hidden="true">»</span></a
+                        >
+                      </li>
+                    </ul>
+                  </nav>
+                </div> -->
+                <div class="col text-end align-self-center">
+                  <button
+                  data-connection_id="{{ connection_id }}"
+                  class="btn btn-primary"
+                    type="button"
+                    id="create_modal_button"
+                    style="--bs-success: #127a29; --bs-success-rgb: 18, 122, 41"
+                  >
+                    Create a project
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+    <script src="{% static 'assets/bootstrap/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'assets/js/bs-init.js' %}"></script>
+    <script src="{% static 'assets/js/jquery-3.6.0.min.js' %}"></script>
+    <script src="{% static 'assets/js/theme.js' %}"></script>
+    <script src="{% static 'assets/js/modal-project.js' %}"></script>
+  </body>
+</html>

@@ -1,0 +1,329 @@
+{% load static %}
+{% load template_filters %}
+
+{% include 'includes/top_main_tags.html' with title="Dashboard" %}
+
+  <body id="page-top">
+    <div id="wrapper">
+      {% include 'includes/sidebar.html' with connection_id=connection_id project_id=project_id %}
+      <div class="d-flex flex-column" id="content-wrapper">
+        <div id="content">
+          {% include 'includes/topbar.html' %}
+          <div class="container-fluid">
+            {% include 'includes/messages.html' %}
+            <div
+              class="d-sm-flex justify-content-between align-items-center mb-4"
+            >
+              <h3 class="text-dark mb-0">Dashboard</h3>
+              <div>
+                <!-- <a
+                  class="btn btn-success btn-sm d-none d-sm-inline-block text-white"
+                  role="button"
+                  href="/connections/{{ connection_id }}/projects/{{ project_id }}/dashboard/open"
+                  ><i class="fa-solid fa-folder-open fa-sm text-white"></i
+                  >&nbsp;Open the project</a
+                >
+                <a
+                  class="btn btn-danger btn-sm d-none d-sm-inline-block text-white"
+                  role="button"
+                  href="/connections/{{ connection_id }}/projects/{{ project_id }}/dashboard/close"
+                  ><i class="fa-solid fa-folder fa-sm text-white"></i
+                  >&nbsp;Close the project</a
+                ><span> | </span> -->
+                <a
+                  class="btn btn-success btn-sm d-none d-sm-inline-block text-white"
+                  role="button"
+                  href="/connections/{{ connection_id }}/projects/{{ project_id }}/dashboard/create"
+                  ><i class="fa-solid fa-plus fa-sm text-white"></i
+                  >&nbsp;New device</a
+                >
+              <a
+                class="btn btn-primary btn-sm d-none d-sm-inline-block"
+                role="button"
+                href=""
+                ><i class="fa-solid fa-rotate fa-sm text-white-50"></i
+                >&nbsp;Refresh</a
+              >
+            </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6 col-xl-3 mb-4">
+                <div class="card shadow border-start-primary py-2">
+                  <div class="card-body">
+                    <div class="row align-items-center no-gutters">
+                      <div class="col me-2">
+                        <div
+                          class="text-uppercase text-primary fw-bold text-xs mb-1"
+                        >
+                          <span>Project Name</span>
+                        </div>
+                        <div class="text-dark fw-bold h5 mb-0">
+                          <span>{{ project.name }}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6 col-xl-3 mb-4">
+                <div class="card shadow border-start-success py-2">
+                  <div class="card-body">
+                    <div class="row align-items-center no-gutters">
+                      <div class="col me-2">
+                        <div
+                          class="text-uppercase text-success fw-bold text-xs mb-1"
+                        >
+                          <span>Project Status</span>
+                        </div>
+                        <div class="text-dark fw-bold h5 mb-0">
+                          <span>{{ project.status }}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6 col-xl-3 mb-4">
+                <div class="card shadow border-start-info py-2">
+                  <div class="card-body">
+                    <div class="row align-items-center no-gutters">
+                      <div class="col me-2">
+                        <div
+                          class="text-uppercase text-success fw-bold text-xs mb-1"
+                        >
+                          <span>Number Of Devices</span>
+                        </div>
+                        <div class="text-dark fw-bold h5 mb-0">
+                          <span>{{ project.stats.nodes }}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6 col-xl-3 mb-4">
+                <div class="card shadow border-start-warning py-2">
+                  <div class="card-body">
+                    <div class="row align-items-center no-gutters">
+                      <div class="col me-2">
+                        <div
+                          class="text-uppercase text-warning fw-bold text-xs mb-1"
+                        >
+                          <span>Running Devices</span>
+                        </div>
+                        <div class="text-dark fw-bold h5 mb-0">
+                          <span>{{ stats.started }}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-lg-12 col-xl-12">
+                <div class="card shadow mb-4">
+                  <div class="card-header py-3">
+                    <h6 class="text-primary fw-bold m-0">Current Topology</h6>
+                  </div>
+                  <div class="card-body text-center">
+                    <div id="network_drawing"></div>
+                    <!-- <img src="/connections/{{ connection_id }}/projects/{{ project_id }}/dashboard/network" alt="" srcset=""> -->
+                  </div>
+                </div>
+              </div>
+              <!-- <div class="col-lg-5 col-xl-4">
+                <div class="card shadow mb-4">
+                  <div
+                    class="card-header d-flex justify-content-between align-items-center"
+                  >
+                    <h6 class="text-primary fw-bold m-0">
+                      Up And Down Devices
+                    </h6>
+                    <div class="dropdown no-arrow">
+                      <button
+                        class="btn btn-link btn-sm dropdown-toggle"
+                        aria-expanded="false"
+                        data-bs-toggle="dropdown"
+                        type="button"
+                      >
+                        <i class="fas fa-ellipsis-v text-gray-400"></i>
+                      </button>
+                      <div
+                        class="dropdown-menu shadow dropdown-menu-end animated--fade-in"
+                      >
+                        <p class="text-center dropdown-header">
+                          dropdown header:
+                        </p>
+                        <a class="dropdown-item" href="#">&nbsp;Action</a
+                        ><a class="dropdown-item" href="#"
+                          >&nbsp;Another action</a
+                        >
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="#"
+                          >&nbsp;Something else here</a
+                        >
+                      </div>
+                    </div>
+                  </div>
+                  <div class="card-body">
+                    <div class="chart-area">
+                      <canvas
+                        data-bss-chart='{"type":"doughnut","data":{"labels":["Up","Down"],"datasets":[{"label":"","backgroundColor":["#4e73df","#1cc88a","#36b9cc"],"borderColor":["#ffffff","#ffffff","#ffffff"],"data":["50","30","15"]}]},"options":{"maintainAspectRatio":false,"legend":{"display":false,"labels":{"fontStyle":"normal"}},"title":{"fontStyle":"normal"}}}'
+                      ></canvas>
+                    </div>
+                    <div class="text-center small mt-4">
+                      <span class="me-2"
+                        ><i class="fas fa-circle text-primary"></i
+                        >&nbsp;Direct</span
+                      ><span class="me-2"
+                        ><i class="fas fa-circle text-success"></i
+                        >&nbsp;Social</span
+                      ><span class="me-2"
+                        ><i class="fas fa-circle text-info"></i
+                        >&nbsp;Refferal</span
+                      >
+                    </div>
+                  </div>
+                </div>
+              </div> -->
+            </div>
+
+            <div class="row">              
+                <div class="col-lg-12 col-xl-12">
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                            <h6 class="text-primary fw-bold m-0">Nodes</h6>
+                        </div>
+                        <div class="card-body text-center">
+                            <div class="row">
+                                {% if nodes_list %}
+                            {% for node in nodes_list %}
+                            <div class="col-lg-3 mb-4">
+                                <div class='card textwhite rounded border
+                                {% if node.status == "started" %}bg-success border-success{% elif node.status == "suspended" %}bg-warning border-warning{% else %}bg-danger border-danger{% endif %} text-white shadow'>
+                                <div class="card-body" style="min-height: 125px;">
+                                    <h5 class="font-weight-bold"><strong>{{ node.name }} - {{ node.node_type }}</strong></h5>
+                                    <p class="m-0">Status: {{ node.status }}</p>
+                                    <p class="m-0">Node Type: {{ templates_dict|get_item:node.template_id }}</p>
+                                    <p class="m-0">Console Host: {{ node.console_host }}</p>
+                                    <p class="m-0">Console Port: {{ node.console }}</p>
+                                    <p class="m-0">Console Type: {{ node.console_type }}</p>
+                                </div>
+                                <div class="card-footer">
+                                    <div class="align-bottom">
+                                        <a
+                                        data-id="{{ project.project_id }}"
+                                        data-name="{{ project.name }}"
+                                        data-connection_id="{{ connection_id }}"
+                                        href="/connections/{{ connection_id }}/projects/{{ project.project_id }}/devices/{{ node.node_id }}/start"
+                                        class="btn btn-success"
+                                        role="button"
+                                        style="
+                                            color: rgb(255, 255, 255);
+                                        "
+                                        >
+                                        <i class="fa-solid fa-play"></i>
+                                        </a>
+                                        <a
+                                        data-id="{{ project.project_id }}"
+                                        data-name="{{ project.name }}"
+                                        data-connection_id="{{ connection_id }}"
+                                        href="/connections/{{ connection_id }}/projects/{{ project.project_id }}/devices/{{ node.node_id }}/reload"
+                                        class="btn btn-info"
+                                        role="button"
+                                        style="
+                                            color: rgb(255, 255, 255);
+                                        "
+                                        >
+                                        <i class="fa-solid fa-arrow-rotate-right"></i>
+                                        </a>
+                                        <a
+                                        class="btn btn-warning"
+                                        role="button"
+                                        data-id="{{ project.project_id }}"
+                                        data-name="{{ project.name }}"
+                                        data-connection_id="{{ connection_id }}"
+                                        style="color: white"
+                                        href="/connections/{{ connection_id }}/projects/{{ project.project_id }}/devices/{{ node.node_id }}/suspend"
+                                        ><i
+                                            data-id="{{ project.project_id }}"
+                                            data-name="{{ project.name }}"
+                                            data-connection_id="{{ connection_id }}"
+                                            class="fa-solid fa-pause"
+                                            ></i
+                                        ></a
+                                        >
+                                        <a
+                                        class="btn btn-danger"
+                                        role="button"
+                                        data-id="{{ project.project_id }}"
+                                        data-name="{{ project.name }}"
+                                        data-connection_id="{{ connection_id }}"
+                                        href="/connections/{{ connection_id }}/projects/{{ project.project_id }}/devices/{{ node.node_id }}/stop"
+                                        ><i
+                                            data-id="{{ project.project_id }}"
+                                            data-name="{{ project.name }}"
+                                            data-connection_id="{{ connection_id }}"
+                                            class="fa-solid fa-stop"
+                                            ></i
+                                        ></a
+                                        ><span style="color: gray; font-size: large;"> | </span>
+                                        <a
+                                        data-id="{{ project.project_id }}"
+                                        data-name="{{ project.name }}"
+                                        data-connection_id="{{ connection_id }}"
+                                        href="/connections/{{ connection_id }}/projects/{{ project.project_id }}/devices/{{ node.node_id }}/view"
+                                        class="btn btn-primary"
+                                        role="button"
+                                        style="
+                                            margin-right: 5px;
+                                            color: rgb(255, 255, 255);
+                                        "
+                                        >
+                                        <i
+                                        data-id="{{ project.project_id }}"
+                                        data-name="{{ project.name }}"
+                                        data-connection_id="{{ connection_id }}"
+                                         class="fa-solid fa-eye"></i>
+                                         </a
+                                        ><a
+                                        class="btn btn-danger"
+                                        role="button"
+                                        data-id="{{ project.project_id }}"
+                                        data-name="{{ project.name }}"
+                                        data-connection_id="{{ connection_id }}"
+                                        href="/connections/{{ connection_id }}/projects/{{ project.project_id }}/devices/{{ node.node_id }}/delete"
+                                        ><i
+                                            data-id="{{ project.project_id }}"
+                                            data-name="{{ project.name }}"
+                                            data-connection_id="{{ connection_id }}"
+                                            class="fa-solid fa-delete-left"
+                                            ></i
+                                        ></a
+                                        >
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    {% endif %}
+                    </div>
+                </div>
+            </div>
+            </div>
+        </div>
+          </div>
+        </div>
+        <script src="{% static 'assets/js/d3.min.js' %}"></script>
+        <script src="{% static 'assets/js/axios.min.js' %}"></script>
+        <script src="{% static 'assets/js/dashboard.js' %}"></script>
+    <script>
+      window.onload = function () {
+        draw_network(
+          "/connections/{{ connection_id }}/projects/{{ project_id }}/dashboard/network"
+        );
+      };
+    </script>
+        {% include 'includes/footer.html' %}
+

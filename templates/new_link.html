@@ -1,0 +1,128 @@
+{% load static %}
+{% load template_filters %}
+
+{% include 'includes/top_main_tags.html' with title="New Link" %}
+
+  <body id="page-top">
+    <div id="wrapper">
+      {% include 'includes/sidebar.html' with connection_id=connection_id project_id=project_id %}
+      <div class="d-flex flex-column" id="content-wrapper">
+        <div id="content">
+          {% include 'includes/topbar.html' %}
+          <div class="container-fluid">
+            {% include 'includes/messages.html' %}
+            <div
+              class="d-sm-flex justify-content-between align-items-center mb-4"
+            >
+              <h3 class="text-dark mb-0">Device Linking</h3>
+            </div>  
+            <div class="row">
+              <div class="col-lg-12 col-xl-12">
+                <div class="card shadow mb-4">
+                  <div class="card-header py-3">
+                    <h6 class="text-primary fw-bold m-0">New Link</h6>
+                  </div>
+                  <div class="card-body text-left">
+                    <form id="card-form" method="POST">
+                      <div class="row">
+                        <div class="col-lg-3">
+                          {% csrf_token %}
+                          <!-- <div class="mb-3">
+                            <label class="form-label" for="node_a_id">
+                              <strong>First Device</strong><br />
+                            </label>
+                            <select name="node_a_id" class="form-select" aria-label="Choose a template">
+                              <option disabled selected>Open this select menu</option>
+                              {% if nodes %}
+                                {% for node in nodes %}
+                                  <option name="node_a_id" value="{{ node.node_id }}">{{ node.name }}</option>
+                                {% endfor %}
+                              {% endif %}
+                            </select>
+                          </div> -->
+                          <div class="mb-3">
+                            <label class="form-label" for="port_a_id">
+                              <strong>First Port</strong><br />
+                            </label>
+                            <select name="port_a_id" class="form-select" aria-label="Choose a template">
+                              <option disabled selected>Open this select menu</option>
+                              {% if ports_list %}
+                                {% for port in ports_list %}
+                                  <option
+                                  id="{{ port.node_id }}"
+                                  class="port_a"
+                                  name="port_a_id"
+                                  value="{{ port.node_id }}/{{ port.adapter_number }}/{{ port.port_number }}">{{port.node_name}} - {{ port.name }}</option>
+                                {% endfor %}
+                              {% endif %}
+                            </select>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-lg-3">
+                          <!-- <div class="mb-3">
+                            <label class="form-label" for="node_b_id"
+                              ><strong>Second Device</strong><br /></label
+                            ><select name="node_b_id" class="form-select" aria-label="Choose a template">
+                              <option disabled selected>Open this select menu</option>
+                              {% if nodes %}
+                                {% for node in nodes %}
+                                  <option name="node_b_id" value="{{ node.node_id }}">{{ node.name }}</option>
+                                {% endfor %}
+                              {% endif %}
+                            </select>
+                          </div> -->
+                          <div class="mb-3">
+                            <label class="form-label" for="port_b_id">
+                              <strong>Second Port</strong><br />
+                            </label>
+                            <select name="port_b_id" class="form-select" aria-label="Choose a template">
+                              <option disabled selected>Open this select menu</option>
+                              {% if ports_list %}
+                                {% for port in ports_list %}
+                                <option
+                                id="{{ port.node_id }}"
+                                class="port_b"
+                                name="port_b_id"
+                                value="{{ port.node_id }}/{{ port.adapter_number }}/{{ port.port_number }}">{{port.node_name}} - {{ port.name }}</option>
+                                {% endfor %}
+                              {% endif %}
+                            </select>
+                          </div>
+                        </div>
+                      </div>
+                      <!-- <div class="row">
+                        <div class="col">
+                          <div class="mb-3">
+                            <label class="form-label" for="template_id">
+                              <strong>Link with</strong><br />
+                            </label>
+                            {% if nodes_list %}
+                              {% for node in nodes_list %}
+                              <div class="form-check form-switch form-check-inline">
+                                <input class="form-check-input" role="switch" name="node_to_link" type="checkbox" id="{{ node.node_id }}" value="{{ node.node_id }}">
+                                <label class="form-check-label" for="{{ node.node_id }}">{{ node.name }}</label>
+                              </div>
+                              {% endfor %}
+                            {% endif %}
+                          </div>
+                        </div>
+                      </div> -->
+                      <div class="row" style="margin-top: 1rem">
+                        <div class="col">
+                          <div class="mb-3">
+                            <button id="submit-btn" class="btn btn-primary btn-sm" type="submit">
+                              Create
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% include 'includes/footer.html' %}

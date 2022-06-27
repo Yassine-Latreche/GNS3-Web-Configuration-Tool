@@ -1,0 +1,137 @@
+{% load static %}
+{% load template_filters %}
+
+{% include 'includes/top_main_tags.html' with title="Configure Vlan Access Mode" %}
+
+  <body id="page-top">
+    <div id="wrapper">
+      {% include 'includes/sidebar.html' with connection_id=connection_id project_id=project_id %}
+      <div class="d-flex flex-column" id="content-wrapper">
+        <div id="content">
+          {% include 'includes/topbar.html' %}
+          <div class="container-fluid">
+            {% include 'includes/messages.html' %}
+            <div
+              class="d-sm-flex justify-content-between align-items-center mb-4"
+            >
+              <h3 class="text-dark mb-0">Device Interfaces IP Address</h3>
+            </div>  
+            <div class="row">
+              <div class="col-lg-12 col-xl-12">
+                <div class="card shadow mb-4">
+                  <div class="card-header py-3">
+                    <h6 class="text-primary fw-bold m-0">Configure IP Addresses</h6>
+                  </div>
+                  <div class="card-body text-left">
+                    <form id="InterfacesIpAddress" method="POST">
+                      <div class="row">
+                        <div class="col-lg-12">
+                          {% csrf_token %}
+                          <div class="mb-3">
+                            <label class="form-label" for="port_b_id">
+                              <strong>Interfaces: </strong><br />
+                            </label>
+                            <div class="row">
+                            {% if device %}
+                            {% for port in device.ports %}
+                              <div class="col-xl-3">
+                                <div class="col">
+                                  <label class="form-label" for="check-{{ port.name }}">
+                                    <strong>Interface</strong>
+                                  </label>
+                                  <input class="form-check-input" type="checkbox" value="check-{{ port.name }}" id="check-{{ port.name }}">
+                                  <label class="form-check-label" for="check-{{ port.name }}">
+                                    {{ port.name }}
+                                  </label>
+                                </div>
+                                <div class="mb-3">
+                                  <label class="form-label" for="ipAddress-{{ port.name }}"
+                                    ><strong>IP Address</strong><br /></label
+                                  ><input
+                                    class="form-control"
+                                    type="text"
+                                    id="ipAddress-{{ port.name }}"
+                                    placeholder="IP Address"
+                                    name="ipAddress-{{ port.name }}"
+                                  />                        
+                                </div>
+                                <div class="mb-3">
+                                  <label class="form-label" for="macAddress-{{ port.name }}"
+                                    ><strong>Mac Address</strong><br /></label
+                                  ><input
+                                    class="form-control"
+                                    type="text"
+                                    id="macAddress-{{ port.name }}"
+                                    placeholder="Mac Address"
+                                    name="macAddress-{{ port.name }}"
+                                  />                        
+                                </div>
+                                <hr>
+                              </div>
+                            {% endfor %}
+                            {% endif %}
+                          </div>
+                      <div class="row" style="margin-top: 1rem">
+                        <div class="col">
+                          <div class="mb-3">
+                            <button id="submit-btn" class="btn btn-primary btn-sm" type="submit">
+                              Create
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <script>
+          window.onload = function() {
+            $('#InterfacesIpAddress').submit(function(e) {
+              e.preventDefault();
+                var $inputs = $('#InterfacesIpAddress :input');
+                let interfaces = {};
+                $inputs.each(function() {
+                  let splitted = this.id.split("-")
+                  if (splitted.length>1 && splitted[1] != "btn") {
+                    if (interfaces.hasOwnProperty(splitted[1])) {
+                      if (this.value == "") {
+                        delete interfaces[splitted[1]]
+                      } else {
+                        interfaces[splitted[1]] += "+"+this.value
+                      } 
+                    } else {
+                      if (this.type == "checkbox" && this.checked == true) {
+                        interfaces[splitted[1]] = splitted[1]
+                      }
+                    }
+                  }
+                });
+                // console.log(interfaces)
+                var values = $.map(interfaces, function(value, key) { return value });
+                // console.log(values)
+                let data = {
+                  csrfmiddlewaretoken : $('input[name="csrfmiddlewaretoken"]').val(),
+                  "interfaces" : values,
+                //   vlanIpAddress : $('input[name="vlanIpAddress"]').val(),
+                //   vlanMask : $('input[name="vlanMask"]').val(),
+                //   vlanDefaultGateway : $('input[name="vlanDefaultGateway"]').val(),
+                }
+                let currentLink = window.location.href
+                $.post( currentLink, data)
+                .done(function( rep ) {
+                  console.log(rep)
+                  alert( rep );
+                  window.location.href = currentLink.replace("interfaces_ip_address", "view");
+                }).fail(function(rep) {
+                  console.log(rep.responseText)
+                  alert( "Done !" );
+                  window.location.href = currentLink.replace("interfaces_ip_address", "view");
+                });
+                return false;
+            });
+          }
+        </script>
+        {% include 'includes/footer.html' %}

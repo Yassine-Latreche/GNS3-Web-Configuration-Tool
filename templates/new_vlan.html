@@ -1,0 +1,119 @@
+{% load static %}
+{% load template_filters %}
+
+{% include 'includes/top_main_tags.html' with title="New Link" %}
+
+  <body id="page-top">
+    <div id="wrapper">
+      {% include 'includes/sidebar.html' with connection_id=connection_id project_id=project_id %}
+      <div class="d-flex flex-column" id="content-wrapper">
+        <div id="content">
+          {% include 'includes/topbar.html' %}
+          <div class="container-fluid">
+            {% include 'includes/messages.html' %}
+            <div
+              class="d-sm-flex justify-content-between align-items-center mb-4"
+            >
+              <h3 class="text-dark mb-0">Device Vlans</h3>
+            </div>  
+            <div class="row">
+              <div class="col-lg-12 col-xl-12">
+                <div class="card shadow mb-4">
+                  <div class="card-header py-3">
+                    <h6 class="text-primary fw-bold m-0">New Vlan</h6>
+                  </div>
+                  <div class="card-body text-left">
+                    <form id="createForm">
+                      <div class="row">
+                        <div class="col-lg-3">
+                          {% csrf_token %}
+                          <div class="mb-3">
+                            <label class="form-label" for="vlanNumber"
+                              ><strong>Vlan Number</strong><br /></label
+                            ><input
+                              class="form-control"
+                              type="text"
+                              id="vlanNumber"
+                              placeholder="Vlan Number"
+                              name="vlanNumber"
+                            />                        
+                          </div>
+                          <!-- <div class="mb-3">
+                            <label class="form-label" for="vlanIpAddress"
+                              ><strong>IP Address</strong><br /></label
+                            ><input
+                              class="form-control"
+                              type="text"
+                              id="vlanIpAddress"
+                              placeholder="IP Address"
+                              name="vlanIpAddress"
+                            />                        
+                          </div>
+                          <div class="mb-3">
+                            <label class="form-label" for="vlanMask"
+                              ><strong>Mask</strong><br /></label
+                            ><input
+                              class="form-control"
+                              type="text"
+                              id="vlanMask"
+                              placeholder="Mask"
+                              name="vlanMask"
+                            />                        
+                          </div>
+                          <div class="mb-3">
+                            <label class="form-label" for="vlanDefaultGateway"
+                              ><strong>Default Gateway</strong><br /></label
+                            ><input
+                              class="form-control"
+                              type="text"
+                              id="vlanDefaultGateway"
+                              placeholder="Default Gateway"
+                              name="vlanDefaultGateway"
+                            />                        
+                          </div> -->
+                        </div>
+                      </div>
+                      <div class="row" style="margin-top: 1rem">
+                        <div class="col">
+                          <div class="mb-3">
+                            <button id="submit-btn" class="btn btn-primary btn-sm" type="submit">
+                              Create
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <script>
+          window.onload = function() {
+            $('#createForm').submit(function(e) {
+                var $inputs = $('#createForm :input');
+                console.log($inputs);
+                let data = {
+                  csrfmiddlewaretoken : $('input[name="csrfmiddlewaretoken"]').val(),
+                  vlanNumber : $('input[name="vlanNumber"]').val(),
+                  vlanIpAddress : $('input[name="vlanIpAddress"]').val(),
+                  vlanMask : $('input[name="vlanMask"]').val(),
+                  vlanDefaultGateway : $('input[name="vlanDefaultGateway"]').val(),
+                }
+                let currentLink = window.location.href
+                $.post( currentLink, data)
+                .done(function( rep ) {
+                  console.log(rep.responseText)
+                  alert( "Done !" );
+                  window.location.href = currentLink.replace("create_vlan", "view");
+                }).fail(function(rep) {
+                  console.log(rep.responseText)
+                  alert( "Done !" );
+                  window.location.href = currentLink.replace("create_vlan", "view");
+                });
+                return false;
+            });
+          }
+        </script>
+        {% include 'includes/footer.html' %}

@@ -1,0 +1,23 @@
+.container {
+    text-align: center;
+  }
+  
+  #network_drawing {
+    max-width: 500px;
+  }
+  
+  .node circle {
+    stroke: white;
+    stroke-width: 1.5;
+  }
+  
+  .node text {
+    font-family: Helvetica, sans-serif;
+    fill: black;
+    font-size: 12px;
+  }
+  
+  .link {
+    stroke: black;
+    stroke-opacity: 0.6;
+  }

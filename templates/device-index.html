@@ -1,0 +1,510 @@
+{% load static %}
+{% load template_filters %}
+
+{% include 'includes/top_main_tags.html' with title="Device Index" %}
+
+  <body id="page-top">
+    <div id="wrapper">
+      {% include 'includes/sidebar.html' with connection_id=connection_id project_id=project_id device_id=device_id %}
+      <div class="d-flex flex-column" id="content-wrapper">
+        <div id="content">
+          {% include 'includes/topbar.html' %}
+          <div class="container-fluid">
+            {% include 'includes/messages.html' %}
+            <div
+              class="d-sm-flex justify-content-between align-items-center mb-4"
+            >
+              <h3 class="text-dark mb-0">Device: {{ device.name }} - {{ templates_dict|get_item:device.template_id }}</h3>
+              <div>
+                <!-- <a
+                  class="btn btn-success btn-sm d-none d-sm-inline-block text-white"
+                  role="button"
+                  href="/connections/{{ connection_id }}/projects/{{ project_id }}/dashboard/open"
+                  ><i class="fa-solid fa-folder-open fa-sm text-white"></i
+                  >&nbsp;Open the project</a
+                >
+                <a
+                  class="btn btn-danger btn-sm d-none d-sm-inline-block text-white"
+                  role="button"
+                  href="/connections/{{ connection_id }}/projects/{{ project_id }}/dashboard/close"
+                  ><i class="fa-solid fa-folder fa-sm text-white"></i
+                  >&nbsp;Close the project</a
+                ><span> | </span> -->
+                <!-- <a
+                  class="btn btn-success btn-sm d-none d-sm-inline-block text-white"
+                  role="button"
+                  href="/connections/{{ connection_id }}/projects/{{ project_id }}/dashboard/create"
+                  ><i class="fa-solid fa-plus fa-sm text-white"></i
+                  >&nbsp;New device</a
+                > -->
+                <a
+                data-id="{{ project.project_id }}"
+                data-name="{{ project.name }}"
+                data-connection_id="{{ connection_id }}"
+                href="/connections/{{ connection_id }}/projects/{{ project.project_id }}/devices/{{ device.node_id }}/start"
+                class="btn btn-success"
+                role="button"
+                style="
+                    color: rgb(255, 255, 255);
+                "
+                >
+                <i class="fa-solid fa-play"></i>
+                </a>
+                <a
+                data-id="{{ project.project_id }}"
+                data-name="{{ project.name }}"
+                data-connection_id="{{ connection_id }}"
+                href="/connections/{{ connection_id }}/projects/{{ project.project_id }}/devices/{{ device.node_id }}/reload"
+                class="btn btn-info"
+                role="button"
+                style="
+                    color: rgb(255, 255, 255);
+                "
+                >
+                <i class="fa-solid fa-arrow-rotate-right"></i>
+                </a>
+                <a
+                class="btn btn-warning"
+                role="button"
+                data-id="{{ project.project_id }}"
+                data-name="{{ project.name }}"
+                data-connection_id="{{ connection_id }}"
+                style="color: white"
+                href="/connections/{{ connection_id }}/projects/{{ project.project_id }}/devices/{{ device.node_id }}/suspend"
+                ><i
+                    data-id="{{ project.project_id }}"
+                    data-name="{{ project.name }}"
+                    data-connection_id="{{ connection_id }}"
+                    class="fa-solid fa-pause"
+                    ></i
+                ></a
+                >
+                <a
+                class="btn btn-danger"
+                role="button"
+                data-id="{{ project.project_id }}"
+                data-name="{{ project.name }}"
+                data-connection_id="{{ connection_id }}"
+                href="/connections/{{ connection_id }}/projects/{{ project.project_id }}/devices/{{ device.node_id }}/stop"
+                ><i
+                    data-id="{{ project.project_id }}"
+                    data-name="{{ project.name }}"
+                    data-connection_id="{{ connection_id }}"
+                    class="fa-solid fa-stop"
+                    ></i
+                ></a
+                >
+            </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6 col-xl-3 mb-4">
+                <div class="card shadow border-start-primary py-2">
+                  <div class="card-body">
+                    <div class="row align-items-center no-gutters">
+                      <div class="col me-2">
+                        <div
+                          class="text-uppercase text-primary fw-bold text-xs mb-1"
+                        >
+                          <span>Project Name</span>
+                        </div>
+                        <div class="text-dark fw-bold h5 mb-0">
+                          <span>{{ project.name }}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6 col-xl-3 mb-4">
+                <div class="card shadow border-start-success py-2">
+                  <div class="card-body">
+                    <div class="row align-items-center no-gutters">
+                      <div class="col me-2">
+                        <div
+                          class="text-uppercase text-success fw-bold text-xs mb-1"
+                        >
+                          <span>Device Status</span>
+                        </div>
+                        <div class="text-dark fw-bold h5 mb-0">
+                          <span>{{ device.status }}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6 col-xl-3 mb-4">
+                <div class="card shadow border-start-info py-2">
+                  <div class="card-body">
+                    <div class="row align-items-center no-gutters">
+                      <div class="col me-2">
+                        <div
+                          class="text-uppercase text-success fw-bold text-xs mb-1"
+                        >
+                          <span>Console</span>
+                        </div>
+                        <div class="text-dark fw-bold h5 mb-0">
+                          <span>{{ device.console_host }}:{{ device.console }}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6 col-xl-3 mb-4">
+                <div class="card shadow border-start-warning py-2">
+                  <div class="card-body">
+                    <div class="row align-items-center no-gutters">
+                      <div class="col me-2">
+                        <div
+                          class="text-uppercase text-warning fw-bold text-xs mb-1"
+                        >
+                          <span>Console Type</span>
+                        </div>
+                        <div class="text-dark fw-bold h5 mb-0">
+                          <span>{{ device.console_type }}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12 col-xl-12">
+                  <div class="d-sm-flex justify-content-between align-items-center mb-4">
+                    <div>
+                      {% if templates_dict|get_item:device.template_id == "Guest" %}
+                      <button id="showGuestIp" class="btn btn-primary" type="button">
+                        Show IP Address
+                      </button>
+                      {% else %}
+                      <button id="getRunningConfig" class="btn btn-primary" type="button">
+                        Get Running Config
+                      </button>
+                      <button id="getStartupConfig" class="btn btn-primary" type="button">
+                        Get Startup Config
+                      </button>
+                      {% endif %}
+                      {% if templates_dict|get_item:device.template_id == "Switch" %}
+                      <button id="getVlans" class="btn btn-primary" type="button">
+                        Get Vlans
+                      </button>
+                      {% endif %}
+                      {% if templates_dict|get_item:device.template_id == "Router" %}
+                      <button id="getIpRoute" class="btn btn-primary" type="button">
+                        Get IP Routes
+                      </button>
+                      {% endif %}
+                      {% if templates_dict|get_item:device.template_id != "Guest" %}
+                      <span style="color: gray; font-size: large;"> | </span>
+                      <button id="copyRunningToStartup" class="btn btn-primary" type="button">
+                        Copy Running to Startup Config
+                      </button>
+                      {% endif %}
+                    </div>
+                    <div>
+                      {% if templates_dict|get_item:device.template_id == "Switch" %}
+                      <a
+                        class="btn btn-success"
+                        role="button"
+                        data-id="{{ project.project_id }}"
+                        data-name="{{ project.name }}"
+                        style="color: rgb(255, 255, 255);"
+                        data-connection_id="{{ connection_id }}"
+                        href="/connections/{{ connection_id }}/projects/{{ project.project_id }}/devices/{{ device.node_id }}/create_vlan">
+                        Create Vlan
+                      </a>
+                      <a
+                        class="btn btn-success"
+                        role="button"
+                        data-id="{{ project.project_id }}"
+                        data-name="{{ project.name }}"
+                        style="color: rgb(255, 255, 255);"
+                        data-connection_id="{{ connection_id }}"
+                        href="/connections/{{ connection_id }}/projects/{{ project.project_id }}/devices/{{ device.node_id }}/vlan_access_mode">
+                        Configure Ports Access Mode
+                      </a>
+                      {% elif templates_dict|get_item:device.template_id == "Router" %}
+                      <a
+                        class="btn btn-success"
+                        role="button"
+                        data-id="{{ project.project_id }}"
+                        data-name="{{ project.name }}"
+                        style="color: rgb(255, 255, 255);"
+                        data-connection_id="{{ connection_id }}"
+                        href="/connections/{{ connection_id }}/projects/{{ project.project_id }}/devices/{{ device.node_id }}/interfaces_ip_address">
+                        Configure Interfaces IP Address
+                      </a>
+                      <a
+                        class="btn btn-success"
+                        role="button"
+                        data-id="{{ project.project_id }}"
+                        data-name="{{ project.name }}"
+                        style="color: rgb(255, 255, 255);"
+                        data-connection_id="{{ connection_id }}"
+                        href="/connections/{{ connection_id }}/projects/{{ project.project_id }}/devices/{{ device.node_id }}/add_static_route">
+                        Configure Static Route
+                      </a>
+                      {% elif templates_dict|get_item:device.template_id == "Guest" %}
+                      <a
+                        class="btn btn-success"
+                        role="button"
+                        data-id="{{ project.project_id }}"
+                        data-name="{{ project.name }}"
+                        style="color: rgb(255, 255, 255);"
+                        data-connection_id="{{ connection_id }}"
+                        href="/connections/{{ connection_id }}/projects/{{ project.project_id }}/devices/{{ device.node_id }}/guest_ip_address">
+                        Configure Device IP Address
+                      </a>
+                      {% endif %}
+                    </div>
+                  </div>
+                </div>
+                {% if templates_dict|get_item:device.template_id != "Switch" %}
+                <div class="row">
+                  <div class="justify-content-between align-items-center">
+                    <div class="col-3">
+                      <form id="InterfacesIpAddress" class="form-inline" method="post">
+                        {% csrf_token %}
+                        <div class="form-group mb-2">
+                            <label class="form-label d-inline" for="ping">
+                            <strong>Ping Address</strong><br />
+                          </label>
+                          <input
+                          class="form-control d-inline"
+                          type="text"
+                          id="ping"
+                          placeholder="IP Address"
+                          name="ping"
+                          />
+                        </div>
+                        <button id="pingSubmit" class="d-inline btn btn-primary mb-2" type="submit">
+                            Ping
+                        </button>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+                {% endif %}
+                <div class="accordion" id="fetchResults">
+                  </div>
+              </div>
+            </div>
+        </div>
+        <script src="{% static 'assets/js/d3.min.js' %}"></script>
+        <script src="{% static 'assets/js/axios.min.js' %}"></script>
+        <script src="{% static 'assets/js/dashboard.js' %}"></script>
+    <script>
+      window.onload = function () {
+        draw_network(
+          "/connections/{{ connection_id }}/projects/{{ project_id }}/dashboard/network"
+        );
+      
+        $(document).on("click","#getRunningConfig", async function () {
+          let c = $("#runningConfigResult")
+          if (c.length != 0) {
+            c.replaceWith(``)
+          }
+          const loadingButton = `
+                    <button id="getRunningConfig" class="btn btn-primary" type="button" disabled>
+                      <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                      Loading...
+                    </button>`
+          const currentButton = $(this)[0];
+          $(this).replaceWith(loadingButton);
+          await axios.get("/connections/{{ connection_id }}/projects/{{ project.project_id }}/devices/{{ device.node_id }}/running_config").then(response => {
+            $("#fetchResults").append(`
+                      <div class="accordion-item" id="runningConfigResult">
+                        <h2 class="accordion-header" id="runningConfigHeading">
+                          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#runningConfigCollapse" aria-expanded="false" aria-controls="runningConfigCollapse">
+                            Running Configuration
+                          </button>
+                        </h2>
+                        <div id="runningConfigCollapse" class="accordion-collapse collapse" aria-labelledby="runningConfigHeading" data-bs-parent="#fetchResults">
+                          <div class="accordion-body">
+                            <pre style="text-align: left;">${response.data}</pre>
+                          </div>
+                        </div>
+                      </div>`);
+          });
+          $("#getRunningConfig").replaceWith(currentButton);
+        });
+        
+        $(document).on("click","#getStartupConfig", async function () {
+          let c = $("#startupConfigResult")
+          if (c.length != 0) {
+            c.replaceWith(``)
+          }
+          const loadingButton = `
+                    <button id="getStartupConfig" class="btn btn-primary" type="button" disabled>
+                      <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                      Loading...
+                    </button>`
+          const currentButton = $(this)[0];
+          $(this).replaceWith(loadingButton);
+          await axios.get("/connections/{{ connection_id }}/projects/{{ project.project_id }}/devices/{{ device.node_id }}/startup_config").then(response => {
+            $("#fetchResults").append(`
+                      <div class="accordion-item" id="startupConfigResult">
+                        <h2 class="accordion-header" id="startupConfigHeading">
+                          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#startupConfigCollapse" aria-expanded="false" aria-controls="startupConfigCollapse">
+                            Startup Configuration
+                          </button>
+                        </h2>
+                        <div id="startupConfigCollapse" class="accordion-collapse collapse" aria-labelledby="startupConfigHeading" data-bs-parent="#fetchResults">
+                          <div class="accordion-body">
+                            <pre style="text-align: left;">${response.data}</pre>
+                          </div>
+                        </div>
+                      </div>`);
+          });
+          $("#getStartupConfig").replaceWith(currentButton);
+        });
+        
+        $(document).on("click","#getVlans", async function () {
+          let c = $("#vlanResult")
+          if (c.length != 0) {
+            c.replaceWith(``)
+          }
+          const loadingButton = `
+                    <button id="getVlans" class="btn btn-primary" type="button" disabled>
+                      <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                      Loading...
+                    </button>`
+          const currentButton = $(this)[0];
+          $(this).replaceWith(loadingButton);
+          await axios.get("/connections/{{ connection_id }}/projects/{{ project.project_id }}/devices/{{ device.node_id }}/vlans").then(response => {
+            $("#fetchResults").append(`
+                      <div class="accordion-item" id="vlanResult">
+                        <h2 class="accordion-header" id="vlanHeading">
+                          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#vlanCollapse" aria-expanded="false" aria-controls="vlanCollapse">
+                            Vlans
+                          </button>
+                        </h2>
+                        <div id="vlanCollapse" class="accordion-collapse collapse" aria-labelledby="vlanHeading" data-bs-parent="#fetchResults">
+                          <div class="accordion-body">
+                            <pre style="text-align: left;">${response.data}</pre>
+                          </div>
+                        </div>
+                      </div>`);
+          });
+          $("#getVlans").replaceWith(currentButton);
+        });
+        
+        $(document).on("click","#getIpRoute", async function () {
+          let c = $("#ipRouteResult")
+          if (c.length != 0) {
+            c.replaceWith(``)
+          }
+          const loadingButton = `
+                    <button id="getIpRoute" class="btn btn-primary" type="button" disabled>
+                      <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                      Loading...
+                    </button>`
+          const currentButton = $(this)[0];
+          $(this).replaceWith(loadingButton);
+          await axios.get("/connections/{{ connection_id }}/projects/{{ project.project_id }}/devices/{{ device.node_id }}/ip_routes").then(response => {
+            $("#fetchResults").append(`
+                      <div class="accordion-item" id="ipRouteResult">
+                        <h2 class="accordion-header" id="ipRouteHeading">
+                          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#ipRouteCollapse" aria-expanded="false" aria-controls="ipRouteCollapse">
+                            IP Routes
+                          </button>
+                        </h2>
+                        <div id="ipRouteCollapse" class="accordion-collapse collapse" aria-labelledby="ipRouteHeading" data-bs-parent="#fetchResults">
+                          <div class="accordion-body">
+                            <pre style="text-align: left;">${response.data}</pre>
+                          </div>
+                        </div>
+                      </div>`);
+          });
+          $("#getIpRoute").replaceWith(currentButton);
+        });
+        
+        $(document).on("click","#showGuestIp", async function () {
+          let c = $("#showGuestIpResult")
+          if (c.length != 0) {
+            c.replaceWith(``)
+          }
+          const loadingButton = `
+                    <button id="showGuestIp" class="btn btn-primary" type="button" disabled>
+                      <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                      Loading...
+                    </button>`
+          const currentButton = $(this)[0];
+          $(this).replaceWith(loadingButton);
+          await axios.get("/connections/{{ connection_id }}/projects/{{ project.project_id }}/devices/{{ device.node_id }}/guest_show_ip").then(response => {
+            $("#fetchResults").append(`
+                      <div class="accordion-item" id="showGuestIpResult">
+                        <h2 class="accordion-header" id="showGuestIpHeading">
+                          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#showGuestIpCollapse" aria-expanded="false" aria-controls="showGuestIpCollapse">
+                            IP Address
+                          </button>
+                        </h2>
+                        <div id="showGuestIpCollapse" class="accordion-collapse collapse" aria-labelledby="showGuestIpHeading" data-bs-parent="#fetchResults">
+                          <div class="accordion-body">
+                            <pre style="text-align: left;">${response.data}</pre>
+                          </div>
+                        </div>
+                      </div>`);
+          });
+          $("#showGuestIp").replaceWith(currentButton);
+        });
+
+
+        $(document).on("click","#copyRunningToStartup", async function () {
+          const loadingButton = `
+                    <button id="copyRunningToStartup" class="btn btn-primary" type="button" disabled>
+                      <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                      Loading...
+                    </button>`
+          const currentButton = $(this)[0];
+          $(this).replaceWith(loadingButton);
+          await axios.get("/connections/{{ connection_id }}/projects/{{ project.project_id }}/devices/{{ device.node_id }}/copy_running_to_startup").then(response => {
+            if(response.data == "done") {
+              alert(response.data)
+            } else {
+              alert(`Error:
+              ${response.data}`)
+            }
+          });
+          $("#copyRunningToStartup").replaceWith(currentButton);
+        });
+        $(document).on("submit", '#InterfacesIpAddress', async function(e) {
+              e.preventDefault();
+          let c = $("#pingResult")
+          if (c.length != 0) {
+            c.replaceWith(``)
+          }
+          const loadingButton = `
+                    <button id="pingSubmit" class="d-inline btn btn-primary" type="button" disabled>
+                      <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                      Loading...
+                    </button>`
+          const currentButton = $(this)[0];
+          let ip_address = $("#ping")[0].value
+          $(this).replaceWith(loadingButton);
+          await axios.get("/connections/{{ connection_id }}/projects/{{ project.project_id }}/devices/{{ device.node_id }}/ping/"+ip_address, {
+            "csrfmiddlewaretoken":$('input[name="csrfmiddlewaretoken"].value')
+          }).then(response => {
+            $("#fetchResults").append(`
+                      <div class="accordion-item" id="pingResult">
+                        <h2 class="accordion-header" id="pingHeading">
+                          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#pingCollapse" aria-expanded="false" aria-controls="pingCollapse">
+                            Pinging ${ip_address}
+                          </button>
+                        </h2>
+                        <div id="pingCollapse" class="accordion-collapse collapse" aria-labelledby="pingHeading" data-bs-parent="#fetchResults">
+                          <div class="accordion-body">
+                            <pre style="text-align: left;">${response.data}</pre>
+                          </div>
+                        </div>
+                      </div>`);
+          });
+          $("#pingSubmit").replaceWith(currentButton);
+          return false;
+        });
+      }
+    </script>
+        {% include 'includes/footer.html' %}
+
